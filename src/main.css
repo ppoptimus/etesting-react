@@ -1,0 +1,17 @@
+
+@font-face {
+   font-family: 'Mitr';
+   src: local('Mitr'), url(./font/Kanit-Regular.ttf) format('truetype');
+ }
+ body {
+   font-family: 'Mitr'!important;
+ }
+
+ .between {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+ }
+ .cursor {
+   cursor: context-menu !important;
+ }
