@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import './main.css'
 
 const Welcome = React.lazy(() => import('./welcome'))
 const Verify = React.lazy(() => import('./verify'))

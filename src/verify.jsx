@@ -1,11 +1,12 @@
 import { useState, useRef, useCallback } from 'react'
 import Webcam from 'react-webcam'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default function Verify() {
 	const [step1, setStep1] = useState(true)
 	const [step2, setStep2] = useState(false)
-	const [step3, setStep3] = useState(false)
+	const [personal, setPersonal] = useState(null)
 	const [imgSrc, setImgSrc] = useState(null)
 	const webcamRef = useRef(null)
 	const videoConstraints = {
@@ -16,28 +17,58 @@ export default function Verify() {
 
 	/** send citizenid check to server **/
 	const onCheckId = () => {
-		const result = CheckCitizenId()
-		if (result) {
-			setStep2(true)
-			setStep1(false)
-			console.table('step1=', step1, 'step2=', step2, 'step3=', step3)
+		const config = {
+			method: 'get',
+			url: `https://jsonplaceholder.typicode.com/posts`,
+			headers: {
+				'Content-Type': 'application/json',
+			},
 		}
+		axios(config)
+			.then(function (res) {
+				if (res.status == 200) {
+					setStep2(true)
+					setStep1(false)
+					setPersonal(res.data)
+				}
+			})
+			.catch(function (err) {
+				console.log(err)
+			})
 	}
 
+	/** capture from camera set into useState imageSrc **/
 	const onCapture = useCallback(() => {
 		const imageSrc = webcamRef.current.getScreenshot()
 		setImgSrc(imageSrc)
+		Toast.fire({
+			icon: 'success',
+			title: 'ถ่ายรูปสำเร็จ',
+		})
+		setPersonal({ ...personal, ['img_capture']: imageSrc })
 	}, [webcamRef, setImgSrc])
 
+	/** capture again **/
 	const onClearImg = () => {
 		setImgSrc(null)
 	}
 
 	const onConfirm = () => {
-		setStep1(false)
-		setStep2(false)
-		setStep3(true)
-		console.table('step1=', step1, 'step2=', step2, 'step3=', step3)
+		sessionStorage.setItem('personalData', personal)
+		Swal.fire({
+			icon: 'success',
+			title: '',
+			text: 'อัพโหลดรูปสำเร็จ',
+			confirmButtonColor: '#119516',
+			confirmButtonText: 'ตกลง',
+		}).then((result) => {
+			if (result.isConfirmed) {
+			}
+		})
+	}
+
+	const onTest = () => {
+		console.log(JSON.stringify(personal))
 	}
 
 	return (
@@ -57,11 +88,6 @@ export default function Verify() {
 							<label className='rounded-circle bg-warning text-white py-2 px-3 m-2'>2</label>
 							ถ่ายรูป
 						</div>
-						{/* <div className='text-center py-4 mb-0 border-1 border-bottom col-4 fs-6 cursor'
-						style={{backgroundColor:(step3)?'#32d6c5':'#fff', color:(step3)?'#fff':'#000'}}>
-							<label className='rounded-circle bg-warning text-white py-2 px-3 m-1'>3</label>
-							ยืนยันตัวตนสำเร็จ
-						</div> */}
 					</div>
 					<div className='d-flex flex-column align-items-center justify-content-center h-100 px-5 py-4'>
 						{step1 ? (
@@ -107,10 +133,10 @@ export default function Verify() {
 							</div>
 						)}
 					</div>
-					<div className='container'>
-						<div className='row'></div>
-					</div>
 				</div>
+				<button className='btn btn-success shadow fs-6 px-4' onClick={onTest}>
+					Test
+				</button>
 			</div>
 		</>
 	)
@@ -118,8 +144,19 @@ export default function Verify() {
 const CheckCitizenId = async () => {
 	try {
 		const resp = await axios.get('https://jsonplaceholder.typicode.com/posts')
-		return resp
+		return JSON.stringify(resp.data)
 	} catch (err) {
 		return err
 	}
 }
+const Toast = Swal.mixin({
+	toast: true,
+	position: 'top',
+	showConfirmButton: false,
+	timer: 1500,
+	timerProgressBar: true,
+	didOpen: (toast) => {
+		toast.addEventListener('mouseenter', Swal.stopTimer)
+		toast.addEventListener('mouseleave', Swal.resumeTimer)
+	},
+})

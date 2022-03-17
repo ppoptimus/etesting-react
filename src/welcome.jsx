@@ -16,7 +16,7 @@ export default function Welcome() {
 				<div className='card shadow bg' style={{ height: '35rem', width: '50rem' }}>
 					<div className='d-flex flex-column align-items-center justify-content-center h-100 px-5'>
 						<img src='img/logo.png' className='img img-fluid' width={140}></img>
-						<p className='h1 my-4 mx-5 fw-bold text-center'>ระบบการทดสอบมาตรฐานฝีมือแรงงานแห่งชาติ (ภาคความรู้)</p>
+						<p className='h1 my-4 mx-5 fw-bold text-center text-dark'>ระบบการทดสอบมาตรฐานฝีมือแรงงานแห่งชาติ (ภาคความรู้)</p>
 						<Link to='verify'>
 							<button className='btn btn-light shadow fs-4 fw-bold px-4' style={{ color: '#bdb76b' }}>
 								ยืนยันตัวตน
