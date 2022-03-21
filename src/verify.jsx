@@ -2,10 +2,12 @@ import { useState, useRef, useCallback } from 'react'
 import Webcam from 'react-webcam'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import Config from './config/endpoint.json'
 
 export default function Verify() {
 	const [step1, setStep1] = useState(true)
 	const [step2, setStep2] = useState(false)
+	const [citizenId, setCitizenId] = useState(null)
 	const [personal, setPersonal] = useState(null)
 	const [imgSrc, setImgSrc] = useState(null)
 	const webcamRef = useRef(null)
@@ -15,11 +17,15 @@ export default function Verify() {
 		facingMode: 'tester',
 	}
 
+	const onCitizenChange = (e) => {
+		setCitizenId(e.target.value)
+	}
+
 	/** send citizenid check to server **/
 	const onCheckId = () => {
 		const config = {
 			method: 'get',
-			url: `https://jsonplaceholder.typicode.com/posts`,
+			url: `${Config.config_endpoint.candidates_validate}${citizenId}`,
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -30,10 +36,15 @@ export default function Verify() {
 					setStep2(true)
 					setStep1(false)
 					setPersonal(res.data)
+				} else {
+					Toast.fire({
+						icon: 'error',
+						title: 'ยืนยันตัวตนไม่สำเร็จ',
+					})
 				}
 			})
 			.catch(function (err) {
-				console.log(err)
+				console.log('result= ', err)
 			})
 	}
 
@@ -68,7 +79,8 @@ export default function Verify() {
 	}
 
 	const onTest = () => {
-		console.log(JSON.stringify(personal))
+		console.log(personal)
+		console.log(`${Config.config_endpoint.candidates_validate}${citizenId}`)
 	}
 
 	return (
@@ -93,7 +105,10 @@ export default function Verify() {
 						{step1 ? (
 							<>
 								<label className='mb-3'>กรุณาใส่เลขบัตรประจำตัวประชาชน</label>
-								<input className='form-control w-50 mb-3 text-center' maxLength={13}></input>
+								<input
+									className='form-control w-50 mb-3 text-center'
+									maxLength={13}
+									onChange={(e) => onCitizenChange(e)}></input>
 
 								<button className='btn btn-primary shadow fs-6 px-4' onClick={onCheckId}>
 									ถัดไป
@@ -141,19 +156,12 @@ export default function Verify() {
 		</>
 	)
 }
-const CheckCitizenId = async () => {
-	try {
-		const resp = await axios.get('https://jsonplaceholder.typicode.com/posts')
-		return JSON.stringify(resp.data)
-	} catch (err) {
-		return err
-	}
-}
+
 const Toast = Swal.mixin({
 	toast: true,
 	position: 'top',
 	showConfirmButton: false,
-	timer: 1500,
+	timer: 2000,
 	timerProgressBar: true,
 	didOpen: (toast) => {
 		toast.addEventListener('mouseenter', Swal.stopTimer)

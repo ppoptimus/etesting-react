@@ -1,0 +1,5 @@
+{
+   "config_endpoint":{
+      "candidates_validate":"https://localhost:5001/api/candidates/validate/"
+   }
+}
