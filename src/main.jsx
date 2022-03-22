@@ -1,28 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
+import App from './app'
 
-const Welcome = React.lazy(() => import('./welcome'))
-const Verify = React.lazy(() => import('./verify'))
 ReactDOM.render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<Routes>
-				<Route
-					path='/'
-					element={
-						<React.Suspense fallback={<>Loading...</>}>
-							<Welcome />
-						</React.Suspense>
-					}></Route>
-				<Route
-					path='/verify'
-					element={
-						<React.Suspense fallback={<>Loading...</>}>
-							<Verify />
-						</React.Suspense>
-					}></Route>
-			</Routes>
+			<App />
 		</BrowserRouter>
 	</React.StrictMode>,
 	document.getElementById('root'),

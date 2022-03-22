@@ -3,6 +3,7 @@ import Webcam from 'react-webcam'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import Config from './config/endpoint.json'
+import { useNavigate } from 'react-router-dom'
 
 export default function Verify() {
 	const [step1, setStep1] = useState(true)
@@ -16,6 +17,7 @@ export default function Verify() {
 		height: 1280,
 		facingMode: 'tester',
 	}
+	let navigate = useNavigate();
 
 	const onCitizenChange = (e) => {
 		setCitizenId(e.target.value)
@@ -79,21 +81,22 @@ export default function Verify() {
 	}
 
 	const onConfirm = () => {
-		sessionStorage.setItem('personalData', personal)
 		Swal.fire({
 			icon: 'success',
 			title: '',
 			text: 'อัพโหลดรูปสำเร็จ',
 			confirmButtonColor: '#119516',
 			confirmButtonText: 'ตกลง',
-		}).then((result) => {
-			if (result.isConfirmed) {
-			}
+		}).then(() => {
+			sessionStorage.setItem('personal', JSON.stringify(personal))
+			navigate('/')
+			window.location.reload(false)
 		})
 	}
 
 	const onTest = () => {
-		console.log(personal)
+		const personalData = sessionStorage.getItem('personal')
+		console.log(personalData)
 	}
 
 	return (
