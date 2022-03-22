@@ -33,9 +33,18 @@ export default function Verify() {
 		axios(config)
 			.then(function (res) {
 				if (res.status == 200) {
-					setStep2(true)
-					setStep1(false)
-					setPersonal(res.data)
+					Swal.fire({
+						title: 'ยืนยันตัวตนสำเร็จ',
+						text: 'เข้าสู่ขั้นตอนถ่ายรูป',
+						icon: 'info',
+						confirmButtonColor: '#49ad85',
+					}).then((result) => {
+						if (result.isConfirmed) {
+							setStep2(true)
+							setStep1(false)
+							setPersonal(res.data)
+						}
+					})
 				} else {
 					Toast.fire({
 						icon: 'error',
@@ -56,7 +65,12 @@ export default function Verify() {
 			icon: 'success',
 			title: 'ถ่ายรูปสำเร็จ',
 		})
-		setPersonal({ ...personal, ['img_capture']: imageSrc })
+		let updatedValue = {}
+		updatedValue = { imageSrc: imageSrc }
+		setPersonal((personal) => ({
+			...personal,
+			...updatedValue,
+		}))
 	}, [webcamRef, setImgSrc])
 
 	/** capture again **/
@@ -80,7 +94,6 @@ export default function Verify() {
 
 	const onTest = () => {
 		console.log(personal)
-		console.log(`${Config.config_endpoint.candidates_validate}${citizenId}`)
 	}
 
 	return (
