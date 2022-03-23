@@ -11,6 +11,7 @@ export default function Verify() {
 	const [citizenId, setCitizenId] = useState(null)
 	const [personal, setPersonal] = useState(null)
 	const [imgSrc, setImgSrc] = useState(null)
+	const [btnConfirm, setBtnConfirm] = useState('disabled')
 	const webcamRef = useRef(null)
 	const videoConstraints = {
 		width: 720,
@@ -18,7 +19,6 @@ export default function Verify() {
 		facingMode: 'tester',
 	}
 	let navigate = useNavigate();
-
 	const onCitizenChange = (e) => {
 		setCitizenId(e.target.value)
 	}
@@ -55,7 +55,12 @@ export default function Verify() {
 				}
 			})
 			.catch(function (err) {
-				console.log('result= ', err)
+				Toast.fire({
+					icon: 'error',
+					title: err,
+					timer: 5000,
+				})
+				console.log('result verify citizen = ', err)
 			})
 	}
 
@@ -157,7 +162,7 @@ export default function Verify() {
 											ถ่ายอีกครั้ง
 										</button>
 									)}
-									<button className='btn btn-success shadow fs-6 px-4' onClick={onConfirm}>
+									<button className={`btn btn-success shadow fs-6 px-4 ${imgSrc?'enabled':'disabled'}`} onClick={onConfirm}>
 										ยืนยัน
 									</button>
 								</div>

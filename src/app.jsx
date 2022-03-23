@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 const Welcome = React.lazy(() => import('./welcome'))
 const Verify = React.lazy(() => import('./verify'))
