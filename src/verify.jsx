@@ -1,9 +1,11 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import Webcam from 'react-webcam'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import Config from './config/endpoint.json'
 import { useNavigate } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCameraRetro } from '@fortawesome/free-solid-svg-icons'
 
 export default function Verify() {
 	const [step1, setStep1] = useState(true)
@@ -11,14 +13,16 @@ export default function Verify() {
 	const [citizenId, setCitizenId] = useState(null)
 	const [personal, setPersonal] = useState(null)
 	const [imgSrc, setImgSrc] = useState(null)
-	const [btnConfirm, setBtnConfirm] = useState('disabled')
 	const webcamRef = useRef(null)
 	const videoConstraints = {
 		width: 720,
 		height: 1280,
 		facingMode: 'tester',
 	}
-	let navigate = useNavigate();
+	let navigate = useNavigate()
+
+	useEffect(() => {}, [])
+
 	const onCitizenChange = (e) => {
 		setCitizenId(e.target.value)
 	}
@@ -155,14 +159,16 @@ export default function Verify() {
 								<div className='flex-row mt-3'>
 									{!imgSrc ? (
 										<button className='btn btn-info shadow fs-6 px-4 m-2' onClick={onCapture}>
-											ถ่ายรูป
+											<FontAwesomeIcon icon={faCameraRetro} /> ถ่ายรูป
 										</button>
 									) : (
 										<button className='btn btn-secondary shadow fs-6 px-4 m-2' onClick={onClearImg}>
 											ถ่ายอีกครั้ง
 										</button>
 									)}
-									<button className={`btn btn-success shadow fs-6 px-4 ${imgSrc?'enabled':'disabled'}`} onClick={onConfirm}>
+									<button
+										className={`btn btn-success shadow fs-6 px-4 ${imgSrc ? 'enabled' : 'disabled'}`}
+										onClick={onConfirm}>
 										ยืนยัน
 									</button>
 								</div>

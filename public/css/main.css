@@ -1,6 +1,6 @@
 
 @font-face {
-   font-family: 'Mitr';
+   font-family: 'Mitr' !important;
    src: local('Mitr'), url(./font/Kanit-Regular.ttf) format('truetype');
  }
  body {

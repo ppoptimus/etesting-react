@@ -20,6 +20,7 @@ export default function App() {
 				<React.Suspense fallback={<>Loading...</>}>
 					<Routes>
 						<Route path='/' element={<Personal />} />
+						<Route path='/verify' element={<Personal />} />
 					</Routes>
 				</React.Suspense>
 			)}
