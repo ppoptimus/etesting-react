@@ -19,7 +19,7 @@ export default function Verify() {
 		height: 1280,
 		facingMode: 'tester',
 	}
-	let navigate = useNavigate()
+	const navigate = useNavigate()
 
 	useEffect(() => {}, [])
 
@@ -51,7 +51,13 @@ export default function Verify() {
 							setPersonal(res.data)
 						}
 					})
-				} else {
+				}else if(res.status == 204) {
+					Toast.fire({
+						icon: 'warning',
+						title: 'ไม่มีข้อมูลในระบบ',
+					})
+				}
+				 else {
 					Toast.fire({
 						icon: 'error',
 						title: 'ยืนยันตัวตนไม่สำเร็จ',
@@ -97,14 +103,14 @@ export default function Verify() {
 			confirmButtonColor: '#119516',
 			confirmButtonText: 'ตกลง',
 		}).then(() => {
-			sessionStorage.setItem('personal', JSON.stringify(personal))
+			localStorage.setItem('personal', JSON.stringify(personal))
 			navigate('/')
 			window.location.reload(false)
 		})
 	}
 
 	const onTest = () => {
-		const personalData = sessionStorage.getItem('personal')
+		const personalData = localStorage.getItem('personal')
 		console.log(personalData)
 	}
 
@@ -176,9 +182,7 @@ export default function Verify() {
 						)}
 					</div>
 				</div>
-				<button className='btn btn-success shadow fs-6 px-4' onClick={onTest}>
-					Test
-				</button>
+				
 			</div>
 		</>
 	)
